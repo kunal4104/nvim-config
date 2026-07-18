@@ -24,6 +24,8 @@ require("lazy").setup({
     -- AI: Copilot suggestions + Copilot Chat, wired to blink.cmp
     { import = "lazyvim.plugins.extras.ai.copilot" },
     { import = "lazyvim.plugins.extras.ai.copilot-chat" },
+    -- Snacks picker: file/grep finder + <leader>fp project switcher
+    { import = "lazyvim.plugins.extras.editor.snacks_picker" },
     -- Language extras
     { import = "lazyvim.plugins.extras.lang.python" },
     { import = "lazyvim.plugins.extras.lang.typescript" },

@@ -97,6 +97,7 @@ is `<space>`.
 | `<leader>/` / `<leader>sg` | Live grep |
 | `<leader>e` | Toggle file explorer |
 | `<leader>fm` | Open mini.files at current file |
+| `<leader>fp` | Switch project — picks from recent + detected repos, `cd`s into it. Inside the picker: `<C-e>`/`<C-f>`/`<C-g>` open the explorer/find-files/grep scoped to the highlighted project without leaving the picker |
 
 ### LSP
 
@@ -146,6 +147,11 @@ leader binding, which is the fastest way to discover the rest.
   overrides layered on top of LazyVim's own defaults
 - `lua/plugins/` — your own custom plugin specs; add files here to extend or
   override anything from LazyVim/the extras
+- `lua/plugins/snacks.lua` — where `<leader>fp` (project switcher) looks for
+  projects: `dev` scans two levels deep under each listed parent for a repo
+  root (`.git`, etc.); `projects` is an explicit list for standalone repos
+  that don't live under one of those parents. Add new parent folders/repos
+  here as you add them on disk
 - `lazy-lock.json` — pins exact plugin commits; **commit changes to this
   file** after running `:Lazy update` so every machine stays in sync
 - `lazyvim.json` — LazyVim's own state file (install version, seen
