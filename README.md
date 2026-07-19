@@ -62,6 +62,13 @@ on `PATH` first):
 - **Rust + cargo** — not required for `rust-analyzer` itself (Mason fetches
   a prebuilt binary), but recommended so you can actually build/run Rust
   projects from the terminal
+- **`lazydocker`** and **`k9s`** — only needed if you use the `<leader>D` /
+  `<leader>k` Docker/Kubernetes keymaps (see Using It below). On Windows:
+  `winget install --id JesseDuffield.Lazydocker -e` and
+  `winget install --id Derailed.k9s -e`.
+  `lazydocker` also needs a running Docker daemon
+  (`winget install Docker.DockerDesktop`, requires WSL2 + a reboot), and
+  `k9s` needs a valid kubeconfig context pointing at a cluster.
 
 If a runtime is missing, the corresponding Mason install just fails quietly
 in `:Mason` / `:checkhealth mason` — everything else keeps working.
@@ -144,6 +151,48 @@ prompt line for you, same idea as VSCode's "add file/selection to chat".
 Beyond that, type `#file:path/to/file` directly in the chat input (`<Tab>`
 after `#` for path completion) to attach any other file.
 
+### Docker & Kubernetes
+
+| Key | Action |
+| --- | --- |
+| `<leader>D` | Open lazydocker (floating terminal) |
+| `<leader>k` | Open k9s (floating terminal) |
+
+Custom (`lua/plugins/docker.lua`), not LazyVim defaults — each just opens
+the corresponding CLI TUI in a Snacks floating terminal. `<leader>D` needs
+the Docker daemon running to show real containers; `<leader>k` needs a
+valid kubeconfig context to show a real cluster. Press `q` to close the
+floating terminal (the underlying terminal buffer stays alive in the
+background — pressing the same leader key again reopens it instantly).
+
+Both are full TUIs in their own right, so switching context/cluster and
+managing containers all happens inside them, not through extra Neovim
+keymaps:
+
+**k9s (`<leader>k`)**
+
+- `:ctx` — list every context from your kubeconfig, `<enter>` on one to
+  switch live, no restart needed. `:ns` does the same for namespaces.
+- Jump to any resource type by typing its name at the `:` prompt (e.g.
+  `:pods`, `:deploy`, `:svc`).
+- On a selected resource: `d` describe, `l` logs, `s` shell into a
+  container, `e` edit live, `Ctrl-d` delete.
+- `?` shows the full hotkey cheatsheet for whatever view you're in.
+
+**lazydocker (`<leader>D`)**
+
+- Left-side panels (arrow keys, or `1`-`5` to jump directly): Project,
+  Containers, Images, Volumes, Networks.
+- On the Containers panel: `d` remove, `s` stop, `r` restart, `a` attach,
+  `x` opens a menu of container-specific actions (exec shell, full logs,
+  etc.).
+- `?` shows the full keybind list for the current panel — bindings differ
+  slightly per panel.
+- No in-app cluster/host switching — lazydocker always talks to whatever
+  Docker daemon is on `DOCKER_HOST`/the active `docker context`. To manage
+  containers on a different Docker host, run `docker context use <name>`
+  in a regular terminal before opening lazydocker.
+
 Press `<space>` and wait — which-key pops up a menu of every available
 leader binding, which is the fastest way to discover the rest.
 
@@ -160,6 +209,8 @@ leader binding, which is the fastest way to discover the rest.
   root (`.git`, etc.); `projects` is an explicit list for standalone repos
   that don't live under one of those parents. Add new parent folders/repos
   here as you add them on disk
+- `lua/plugins/docker.lua` — `<leader>D`/`<leader>k` keymaps that open
+  `lazydocker`/`k9s` in a Snacks floating terminal
 - `lazy-lock.json` — pins exact plugin commits; **commit changes to this
   file** after running `:Lazy update` so every machine stays in sync
 - `lazyvim.json` — LazyVim's own state file (install version, seen
