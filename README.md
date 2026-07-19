@@ -134,7 +134,15 @@ is `<space>`.
 | `<leader>ax` | Clear Copilot Chat |
 | `<leader>aq` | Quick Copilot Chat prompt |
 | `<leader>ap` | Copilot prompt actions |
+| `<leader>ab` | Add current buffer to Copilot Chat context |
+| `<leader>as` (visual) | Add selection to Copilot Chat context |
 | `Alt+]` / `Alt+[` | Cycle inline Copilot suggestions |
+
+`<leader>ab`/`<leader>as` are custom (`lua/plugins/copilot-chat.lua`), not a
+LazyVim default — they open the chat and drop `#buffer`/`#selection` on the
+prompt line for you, same idea as VSCode's "add file/selection to chat".
+Beyond that, type `#file:path/to/file` directly in the chat input (`<Tab>`
+after `#` for path completion) to attach any other file.
 
 Press `<space>` and wait — which-key pops up a menu of every available
 leader binding, which is the fastest way to discover the rest.
